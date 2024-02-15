@@ -1,27 +1,7 @@
-import axios from "axios";
-import styles from "./PokemonEncounters.module.scss";
 import { useCallback } from "react";
 import { useAsync } from "./useAsync";
-
-type EncountersResponse = {
-  location_area: {
-    name: string;
-  };
-  version_details: {
-    max_chance: number;
-    version: {
-      name: string;
-    };
-  }[];
-}[];
-
-async function getPokemonEncounters(pokemonName: string) {
-  const res = await axios.get<EncountersResponse>(
-    `https://pokeapi.co/api/v2/pokemon/${pokemonName.toLowerCase()}/encounters`
-  );
-
-  return res.data;
-}
+import styles from "./PokemonEncounters.module.scss";
+import { EncountersResponse, getPokemonEncounters } from "./pokeApi";
 
 type PokemonEncountersProps = { pokemonName: string; onCloseClick: () => void };
 

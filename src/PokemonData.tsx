@@ -1,39 +1,20 @@
 import { MouseEventHandler, useCallback, useState } from "react";
-import axios from "axios";
+import { useParams } from "react-router";
 import { PokemonEncounters } from "./PokemonEncounters";
 import { useAsync } from "./useAsync";
+import { getPokemonData } from "./pokeApi";
+import type { PokemonData } from "./pokeApi";
 import styles from "./PokemonData.module.scss";
 
-type PokemonData = {
-  sprites: { other: { "official-artwork": { front_default: string } } };
-  stats: { stat: { name: string }; base_stat: number }[];
-};
-
-type PokemonDataProps = {
-  name: string;
-};
-
-async function getPokemonData(pokemonName: string) {
-  //   if (pokemonName === "Abra") {
-  //     await new Promise((resolve) => setTimeout(resolve, 5000));
-  //   }
-  //   await new Promise((resolve) => setTimeout(resolve, Math.random() * 3000));
-
-  const res = await axios.get<PokemonData>(
-    `https://pokeapi.co/api/v2/pokemon/${pokemonName.toLowerCase()}`
-  );
-
-  return res.data;
-}
-
-export function PokemonData({ name }: PokemonDataProps) {
+export function PokemonData() {
   const {
     isLoading,
     pokemonData,
     isEncountersDialogOpen,
     openEncountersDialog,
     closeEncountersDialog,
-  } = usePokemonData(name);
+    pokemonName,
+  } = usePokemonData();
 
   if (isLoading) {
     return (
@@ -47,7 +28,7 @@ export function PokemonData({ name }: PokemonDataProps) {
     <>
       <article className={styles.pokemonData}>
         <article>
-          <h2>{name}</h2>
+          <h2>{pokemonName}</h2>
           <img
             src={pokemonData?.sprites.other["official-artwork"].front_default}
             alt=""
@@ -80,7 +61,7 @@ export function PokemonData({ name }: PokemonDataProps) {
       </article>
       {isEncountersDialogOpen && (
         <PokemonEncounters
-          pokemonName={name}
+          pokemonName={pokemonName}
           onCloseClick={closeEncountersDialog}
         />
       )}
@@ -88,8 +69,17 @@ export function PokemonData({ name }: PokemonDataProps) {
   );
 }
 
-function usePokemonData(name: string) {
-  const getCurrentPokemonData = useCallback(() => getPokemonData(name), [name]);
+function usePokemonData() {
+  const { pokemonName } = useParams();
+
+  if (!pokemonName) {
+    throw new Error("Pokemon name is required");
+  }
+
+  const getCurrentPokemonData = useCallback(
+    () => getPokemonData(pokemonName),
+    [pokemonName]
+  );
   const { isLoading, data: pokemonData } = useAsync(getCurrentPokemonData);
   const [isEncountersDialogOpen, setIsEncountersDialogOpen] = useState(false);
 
@@ -107,6 +97,7 @@ function usePokemonData(name: string) {
     isEncountersDialogOpen,
     openEncountersDialog,
     closeEncountersDialog,
+    pokemonName,
   };
 }
 

@@ -1,20 +1,9 @@
-import axios from "axios";
-import styles from "./Pokemons.module.scss";
+import { Link } from "react-router-dom";
+import { getPokemons } from "./pokeApi";
 import { useAsync } from "./useAsync";
+import styles from "./Pokemons.module.scss";
 
-async function getPokemons() {
-  const res = await axios.get<{ results: { name: string }[] }>(
-    "https://pokeapi.co/api/v2/pokemon?limit=151"
-  );
-
-  return res.data.results.map(({ name }) => name);
-}
-
-type PokemonsProps = {
-  onPokemonNameClicked: (pokemonName: string) => void;
-};
-
-export function Pokemons({ onPokemonNameClicked }: PokemonsProps) {
+export function Pokemons() {
   const { isLoading, data } = useAsync(getPokemons);
 
   if (isLoading) {
@@ -29,16 +18,9 @@ export function Pokemons({ onPokemonNameClicked }: PokemonsProps) {
     <menu className={styles.wrapper}>
       {data?.map((pokemonName) => (
         <li key={pokemonName} className={styles.listItem}>
-          <a
-            href=""
-            className={styles.link}
-            onClick={(e) => {
-              e.preventDefault();
-              onPokemonNameClicked(pokemonName);
-            }}
-          >
+          <Link to={`/${pokemonName}`} className={styles.link}>
             {pokemonName}
-          </a>
+          </Link>
         </li>
       ))}
     </menu>
