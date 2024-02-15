@@ -12,8 +12,11 @@
     padding: 1rem;
     border-radius: 8px;
     min-width: 45ch;
-    max-height: 40vh;
-    overflow: auto;
+    max-height: 60vh;
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
 
     >*+* {
         margin-top: 1.3em;
@@ -24,6 +27,7 @@
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    overflow: auto;
 }
 
 .areaListItem {
