@@ -29,11 +29,7 @@ export function PokemonEncounters({
   pokemonName,
   onCloseClick,
 }: PokemonEncountersProps) {
-  const getCurrentPokemonEncounters = useCallback(
-    () => getPokemonEncounters(pokemonName),
-    [pokemonName]
-  );
-  const { data, isLoading } = useAsync(getCurrentPokemonEncounters);
+  const { isLoading, encounters } = usePokemonEncounters(pokemonName);
 
   if (isLoading) {
     return (
@@ -45,8 +41,6 @@ export function PokemonEncounters({
       </div>
     );
   }
-
-  const encounters = toEncounters(data!);
 
   return (
     <div className={styles.wrapper}>
@@ -83,6 +77,21 @@ export function PokemonEncounters({
       </article>
     </div>
   );
+}
+
+function usePokemonEncounters(pokemonName: string) {
+  const getCurrentPokemonEncounters = useCallback(
+    () => getPokemonEncounters(pokemonName),
+    [pokemonName]
+  );
+  const { data, isLoading } = useAsync(getCurrentPokemonEncounters);
+
+  const encounters = toEncounters(data ?? []);
+
+  return {
+    isLoading,
+    encounters,
+  };
 }
 
 type Location = {
