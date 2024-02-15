@@ -1,28 +1,17 @@
-import { MouseEventHandler, useCallback, useState } from "react";
-import { useParams } from "react-router";
+import { MouseEventHandler, useState } from "react";
+import { useLoaderData, useParams } from "react-router";
 import { PokemonEncounters } from "./PokemonEncounters";
-import { useAsync } from "./useAsync";
-import { getPokemonData } from "./pokeApi";
 import type { PokemonData } from "./pokeApi";
 import styles from "./PokemonData.module.scss";
 
 export function PokemonData() {
   const {
-    isLoading,
     pokemonData,
     isEncountersDialogOpen,
     openEncountersDialog,
     closeEncountersDialog,
     pokemonName,
   } = usePokemonData();
-
-  if (isLoading) {
-    return (
-      <article className={styles.pokemonData}>
-        <p className={styles.loadingIndicator}>Loading...</p>
-      </article>
-    );
-  }
 
   return (
     <>
@@ -76,11 +65,7 @@ function usePokemonData() {
     throw new Error("Pokemon name is required");
   }
 
-  const getCurrentPokemonData = useCallback(
-    () => getPokemonData(pokemonName),
-    [pokemonName]
-  );
-  const { isLoading, data: pokemonData } = useAsync(getCurrentPokemonData);
+  const pokemonData = useLoaderData() as PokemonData;
   const [isEncountersDialogOpen, setIsEncountersDialogOpen] = useState(false);
 
   const openEncountersDialog: MouseEventHandler<HTMLAnchorElement> = (e) => {
@@ -92,7 +77,6 @@ function usePokemonData() {
   const closeEncountersDialog = () => setIsEncountersDialogOpen(false);
 
   return {
-    isLoading,
     pokemonData,
     isEncountersDialogOpen,
     openEncountersDialog,
