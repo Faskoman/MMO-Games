@@ -18,6 +18,7 @@ export const router = createBrowserRouter([
         loader({ params }) {
           return getPokemonData(params.pokemonName!);
         },
+        errorElement: <p>Pokemon does not exist.</p>,
       },
     ],
   },
