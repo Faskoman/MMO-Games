@@ -1,3 +1,7 @@
+:root {
+    --primary-color: #d9ac26;
+}
+
 *,
 *::before,
 *::after {
@@ -57,7 +61,7 @@ h3 {
 }
 
 a {
-    color: hsl(45deg 70% 50%);
+    color: var(--primary-color);
     text-decoration: none;
     font-weight: 600;
 

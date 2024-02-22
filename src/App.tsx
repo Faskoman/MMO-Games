@@ -5,7 +5,7 @@ import "./App.scss";
 function App() {
   return (
     <main>
-      <h1 className="app-title">Pokedex</h1>
+      <h1 className="app-title">MMO Games</h1>
       <Pokemons />
       <Outlet />
     </main>
