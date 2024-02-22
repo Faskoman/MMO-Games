@@ -1,12 +1,12 @@
 import { Outlet } from "react-router";
-import { Pokemons } from "./Pokemons";
+import { Episodes } from "./Episodes";
 import "./App.scss";
 
 function App() {
   return (
     <main>
       <h1 className="app-title">MMO Games</h1>
-      <Pokemons />
+      <Episodes />
       <Outlet />
     </main>
   );
